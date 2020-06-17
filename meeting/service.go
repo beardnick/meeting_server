@@ -1,5 +1,7 @@
 package meeting
 
+import "meeting/model"
+
 var (
 	store Store = &MeetingStore{}
 )
@@ -7,6 +9,6 @@ var (
 type MeetingService struct {
 }
 
-func (m *MeetingService) create() (id string, err error) {
-	return store.create()
+func (m *MeetingService) create(meeting model.MeetingModel) (id string, err error) {
+	return store.create(meeting)
 }

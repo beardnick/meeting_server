@@ -1,6 +1,7 @@
 package main
 
 import (
+	"meeting/data"
 	"meeting/meeting"
 	"meeting/middleware"
 	"meeting/video"
@@ -13,5 +14,6 @@ func main() {
 	router.Use(middleware.Cors())
 	video.RegisterRouters(&router.RouterGroup)
 	meeting.RegisterRouters(&router.RouterGroup)
+	data.Mysql()
 	router.Run(":9020")
 }

@@ -2,6 +2,7 @@ package meeting
 
 import (
 	"log"
+	"meeting/model"
 	"meeting/response"
 	"net/http"
 
@@ -20,7 +21,13 @@ func hello(c *gin.Context) {
 }
 
 func createMeeting(c *gin.Context) {
-	id, err := service.create()
+	//name := c.Query("name")
+	meeting := model.MeetingModel{}
+	err := c.ShouldBindJSON(&meeting)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+	}
+	id, err := service.create(meeting)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 	}

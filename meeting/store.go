@@ -1,7 +1,9 @@
 package meeting
 
+import "meeting/model"
+
 type Store interface {
-	create() (id string, err error)
+	create(meeting model.MeetingModel) (id string, err error)
 	join(id string) (err error)
 	leave(id string) (err error)
 	end(id string) (err error)

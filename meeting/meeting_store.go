@@ -1,29 +1,22 @@
 package meeting
 
 import (
-	"log"
 	"math/rand"
+	"meeting/global"
+	"meeting/model"
 	"strconv"
 	"time"
-
-	"github.com/garyburd/redigo/redis"
 )
 
 type MeetingStore struct {
 }
 
-func (m *MeetingStore) create() (id string, err error) {
+func (m *MeetingStore) create(meeting model.MeetingModel) (id string, err error) {
 	number := strconv.Itoa(rand.Int())
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	id = number + timestamp
-	client, err := redis.Dial("tcp", "127.0.0.1:6379")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = client.Do("LPUSH", "meeting", id)
-	if err != nil {
-		log.Fatal(err)
-	}
+	meeting.Id = id
+	err = global.DB.Create(&meeting).Error
 	return
 }
 
