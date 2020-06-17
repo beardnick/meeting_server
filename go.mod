@@ -7,6 +7,7 @@ require (
 	github.com/garyburd/redigo v1.6.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis/v8 v8.0.0-beta.3
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.13
 	github.com/micro/go-micro v1.18.0

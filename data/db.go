@@ -5,6 +5,7 @@ import (
 	"meeting/global"
 	"meeting/model"
 
+	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -17,4 +18,12 @@ func Mysql() {
 	global.DB = db
 	// 自动创建表
 	db.AutoMigrate(&model.MeetingModel{})
+}
+
+func Redis() {
+	db, err := redis.Dial("tcp", ":6379")
+	if err != nil {
+		log.Fatal(err)
+	}
+	global.REDIS = db
 }

@@ -1,8 +1,9 @@
 package meeting
 
 import (
-	"log"
+	"fmt"
 	"meeting/model"
+	"meeting/request"
 	"meeting/response"
 	"net/http"
 
@@ -21,15 +22,16 @@ func hello(c *gin.Context) {
 }
 
 func createMeeting(c *gin.Context) {
-	//name := c.Query("name")
 	meeting := model.MeetingModel{}
 	err := c.ShouldBindJSON(&meeting)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
+		return
 	}
 	id, err := service.create(meeting)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
+		return
 	}
 	response.OkWithData(gin.H{"meeting": id}, c)
 }
@@ -38,12 +40,35 @@ func stopMeeting(c *gin.Context) {
 }
 
 func joinMeeting(c *gin.Context) {
+	req := request.JoinMeetingReq{}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	model, err := service.search(req.Meeting)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if &model == nil {
+		response.FailWithMessage(fmt.Sprintf("no meeting %s", req.Meeting), c)
+		return
+	}
+	err = service.join(req.UserModel, req.Meeting)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.Ok(c)
+}
+
+func meetingUsers(c *gin.Context) {
 	meeting := c.Query("meeting")
-	log.Println("meeting:", meeting)
-	c.JSON(
-		http.StatusOK,
-		gin.H{
-			"meeting": meeting,
-		},
-	)
+	users, err := service.meetingUsers(meeting)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithData(gin.H{"users": users}, c)
 }

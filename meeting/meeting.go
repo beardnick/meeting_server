@@ -7,6 +7,6 @@ func RegisterRouters(group *gin.RouterGroup) {
 	//api.POST("")
 	api.POST("", hello)
 	api.POST("create", createMeeting)
-	api.GET("join", joinMeeting)
-
+	api.POST("join", joinMeeting)
+	api.GET("users", meetingUsers)
 }

@@ -15,5 +15,6 @@ func main() {
 	video.RegisterRouters(&router.RouterGroup)
 	meeting.RegisterRouters(&router.RouterGroup)
 	data.Mysql()
+	data.Redis()
 	router.Run(":9020")
 }
