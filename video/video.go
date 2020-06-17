@@ -6,5 +6,6 @@ func RegisterRouters(group *gin.RouterGroup) {
 	api := group.Group("/video")
 	//api.POST("")
 	api.POST("", saveVideo)
+	api.GET("/ws", endPoint)
 
 }
