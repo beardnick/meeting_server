@@ -36,9 +36,6 @@ func createMeeting(c *gin.Context) {
 	response.OkWithData(gin.H{"meeting": id}, c)
 }
 
-func stopMeeting(c *gin.Context) {
-}
-
 func joinMeeting(c *gin.Context) {
 	req := request.JoinMeetingReq{}
 	err := c.ShouldBindJSON(&req)
@@ -64,9 +61,24 @@ func joinMeeting(c *gin.Context) {
 }
 
 func leaveMeeting(c *gin.Context) {
+	req := request.LeaveMeetingReq{}
+	c.ShouldBindJSON(&req)
+	err := service.leave(req.Meeting, req.User)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.Ok(c)
 }
 
 func closeMeeting(c *gin.Context) {
+	meeting := c.Query("meeting")
+	err := service.end(meeting)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.Ok(c)
 }
 
 func meetingUsers(c *gin.Context) {

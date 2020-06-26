@@ -1,7 +1,6 @@
 package meeting
 
 import (
-	"fmt"
 	"meeting/data"
 	"meeting/model"
 	"meeting/testutil"
@@ -25,24 +24,27 @@ func (s *MySuite) TestCreateEnd(c *C) {
 	m, err := service.create(testutil.MockMeetings(1)[0])
 	c.Assert(err, IsNil)
 	c.Assert(m, NotNil)
+
 	meet, err := service.search(m)
 	c.Assert(err, IsNil)
-	c.Assert(meet, NotNil)
-	fmt.Println("createMeeting:", meet)
+	c.Assert(meet.Id, NotNil)
+
 	err = service.end(meet.Id)
 	c.Assert(err, IsNil)
+
 	meet, err = service.search(meet.Id)
 	c.Assert(err, NotNil)
 }
 
 func (s *MySuite) TestJoinLeave(c *C) {
 	m, err := service.create(testutil.MockMeetings(1)[0])
-	fmt.Println("meeting:", m)
 	c.Assert(err, IsNil)
 	defer service.end(m)
-	users := testutil.MockUsers(2)
+
+	users := testutil.MockUsers(10)
 	err = service.joinUsers(users, m)
 	c.Assert(err, IsNil)
+
 	result, err := service.meetingUsers(m)
 	c.Assert(err, IsNil)
 	c.Assert(result, NotNil)
