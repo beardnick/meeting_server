@@ -15,6 +15,7 @@ func Mysql() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("init mysql")
 	global.DB = db
 	// 自动创建表
 	db.AutoMigrate(&model.MeetingModel{})
@@ -25,5 +26,6 @@ func Redis() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("init redis")
 	global.REDIS = db
 }

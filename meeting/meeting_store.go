@@ -29,11 +29,17 @@ func (m *MeetingStore) join(user model.UserModel, id string) (err error) {
 	return
 }
 
-func (m *MeetingStore) leave(id string) (err error) {
+func (m *MeetingStore) leave(mid string, uid string) (err error) {
+	_, err = global.REDIS.Do("HDEL", global.Meeting(mid), uid)
 	return
 }
 
 func (m *MeetingStore) end(id string) (err error) {
+	err = global.DB.Delete(&model.MeetingModel{Id: id}).Error
+	if err != nil {
+		return
+	}
+	_, err = global.REDIS.Do("DEL", global.Meeting(id))
 	return
 }
 

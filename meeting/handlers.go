@@ -63,6 +63,12 @@ func joinMeeting(c *gin.Context) {
 	response.Ok(c)
 }
 
+func leaveMeeting(c *gin.Context) {
+}
+
+func closeMeeting(c *gin.Context) {
+}
+
 func meetingUsers(c *gin.Context) {
 	meeting := c.Query("meeting")
 	users, err := service.meetingUsers(meeting)

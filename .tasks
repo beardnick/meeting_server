@@ -22,4 +22,5 @@ errorformat=%f:%l:%m
 # save file before execute
 save=1
 
+pos=bottom
 
