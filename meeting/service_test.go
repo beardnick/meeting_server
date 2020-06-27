@@ -6,7 +6,7 @@ import (
 	"meeting/testutil"
 	"testing"
 
-	. "gopkg.in/check.v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func init() {
@@ -14,43 +14,40 @@ func init() {
 	data.Redis()
 }
 
-func Test(t *testing.T) { TestingT(t) }
-
-type MySuite struct{}
-
-var _ = Suite(&MySuite{})
-
-func (s *MySuite) TestCreateEnd(c *C) {
+func TestCreateEnd(t *testing.T) {
 	m, err := service.create(testutil.MockMeetings(1)[0])
-	c.Assert(err, IsNil)
-	c.Assert(m, NotNil)
+	assert := assert.New(t)
+	assert.Nil(err)
+	assert.NotNil(m)
 
 	meet, err := service.search(m)
-	c.Assert(err, IsNil)
-	c.Assert(meet.Id, NotNil)
+	assert.Nil(err)
+	assert.NotNil(meet.Id)
 
 	err = service.end(meet.Id)
-	c.Assert(err, IsNil)
+	assert.Nil(err)
 
 	meet, err = service.search(meet.Id)
-	c.Assert(err, NotNil)
+	assert.NotNil(err)
 }
 
-func (s *MySuite) TestJoinLeave(c *C) {
+func TestJoinLeave(t *testing.T) {
+	assert := assert.New(t)
 	m, err := service.create(testutil.MockMeetings(1)[0])
-	c.Assert(err, IsNil)
+	assert.Nil(err)
 	defer service.end(m)
 
 	users := testutil.MockUsers(10)
 	err = service.joinUsers(users, m)
-	c.Assert(err, IsNil)
+	assert.Nil(err)
 
 	result, err := service.meetingUsers(m)
-	c.Assert(err, IsNil)
-	c.Assert(result, NotNil)
-	c.Assert(result, HasLen, len(users))
-	c.Assert(contains(users, result), Equals, true)
-	c.Assert(contains(result, users), Equals, true)
+	assert.Nil(err)
+	assert.NotNil(result)
+	assert.Len(result, len(users))
+	// users == result
+	assert.True(contains(users, result))
+	assert.True(contains(result, users))
 }
 
 func contains(a []model.UserModel, b []model.UserModel) bool {
