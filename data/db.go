@@ -15,7 +15,7 @@ func Mysql() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("init mysql")
+	log.Println("init mysql root:123456@(127.0.0.1:3306)/meeting?charset=utf8&parseTime=True&loc=Local")
 	global.DB = db
 	// 自动创建表
 	db.AutoMigrate(&model.MeetingModel{})
@@ -26,6 +26,6 @@ func Redis() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("init redis")
+	log.Println("init redis 127.0.0.1:6379")
 	global.REDIS = db
 }

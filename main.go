@@ -2,6 +2,7 @@ package main
 
 import (
 	"meeting/data"
+	"meeting/global"
 	"meeting/meeting"
 	"meeting/middleware"
 	"meeting/video"
@@ -16,5 +17,7 @@ func main() {
 	meeting.RegisterRouters(&router.RouterGroup)
 	data.Mysql()
 	data.Redis()
+	defer global.DB.Close()
+	defer global.REDIS.Close()
 	router.Run(":9020")
 }

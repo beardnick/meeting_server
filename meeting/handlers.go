@@ -5,6 +5,7 @@ import (
 	"meeting/model"
 	"meeting/request"
 	"meeting/response"
+	"meeting/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +26,7 @@ func createMeeting(c *gin.Context) {
 	meeting := model.MeetingModel{}
 	err := c.ShouldBindJSON(&meeting)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		response.FailWithMessage(utils.ParamError(err).Error(), c)
 		return
 	}
 	id, err := service.create(meeting)
@@ -40,7 +41,7 @@ func joinMeeting(c *gin.Context) {
 	req := request.JoinMeetingReq{}
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		response.FailWithMessage(utils.ParamError(err).Error(), c)
 		return
 	}
 	model, err := service.search(req.Meeting)
@@ -65,7 +66,7 @@ func leaveMeeting(c *gin.Context) {
 	c.ShouldBindJSON(&req)
 	err := service.leave(req.Meeting, req.User)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		response.FailWithMessage(utils.ParamError(err).Error(), c)
 		return
 	}
 	response.Ok(c)
